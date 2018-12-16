@@ -8,6 +8,8 @@
 
 import UIKit
 
+@IBDesignable //used to show code changes in this class to show in Storyboard view
+//*** MUST run additional function prepareForInterfaceBuilder ***
 class CurrencyTxtField: UITextField {
 
     /*
@@ -18,11 +20,26 @@ class CurrencyTxtField: UITextField {
     }
     */
     
+    //Runs code to show these changes in Interface Builder
+    //However, the awakeFromNib function needs to run at runtime
+    //Therefore, a func needs to be created so that the code can be shared and run by both override functions as needed.
+    override func prepareForInterfaceBuilder() {
+        customizeView()
+    }
+    
+    override func awakeFromNib() {
+        customizeView()
+    }
+ 
+    
+/*
     override func awakeFromNib() {
         super.awakeFromNib()
         backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.25) //Choose "Color Literal" double-click for color/opacity options
         layer.cornerRadius = 5.0
         textAlignment = .center
+     }
+ */
  
 /*
         //Creating custom color for placeholder (not available without coding)
@@ -38,6 +55,8 @@ class CurrencyTxtField: UITextField {
         attributedPlaceholder = place
         textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 */
+    
+/*
         //The commented out block of code above works as expected
         //Below is a cleaner way of writing the same coed
         
@@ -47,7 +66,20 @@ class CurrencyTxtField: UITextField {
             attributedPlaceholder = place
             textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         }
-        
-    }
+*/
+    
+        func customizeView() {
+            backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.25) //Choose "Color Literal" double-click for color/opacity options
+            layer.cornerRadius = 5.0
+            textAlignment = .center
+            
+            if let p = placeholder {
+                //"p" can replace "placeholder!" from above code because if "p" is nil, none of this code will run
+                let place = NSAttributedString(string: p, attributes: [.foregroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)])
+                attributedPlaceholder = place
+                textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            }
+        }
+    
 
 }
