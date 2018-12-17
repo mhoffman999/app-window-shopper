@@ -13,6 +13,9 @@ class MainVC: UIViewController {
     
     @IBOutlet weak var wageTxt: CurrencyTxtField!
     @IBOutlet weak var priceTxt: CurrencyTxtField!
+    @IBOutlet weak var resultLbl: UILabel!
+    @IBOutlet weak var hourLbl: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,13 +35,39 @@ class MainVC: UIViewController {
         //Sets the created button as an accessory view whenever the 2 text fields are accessed from the app
         wageTxt.inputAccessoryView = calcBtn
         priceTxt.inputAccessoryView = calcBtn
+        
+        //The resultsLbl and hourLbl will load as hidden
+        resultLbl.isHidden = true
+        hourLbl.isHidden = true
     }
     
     //See above for ".addTarget", using "#selector" requires adding "@objc" to the func
     @objc func calculate() {
-        print("Working like a charm!")
+        //print("Working like a charm!")
+        //naming a variable within a func with the same name as an outside variable will not reference the outside variable
+        //The local scope of the func's variable is maintained
+        
+        //Says, "calculate" will only work if the text fields are not nil
+        //If they are not nil, store them in the respective variablesof the "if let"
+        if let wageTxt = wageTxt.text, let priceTxt = priceTxt.text {
+            //Casting the text from the fields into Doubles
+            if let wage = Double(wageTxt), let price = Double(priceTxt) {
+                //Dismiss the keyboard
+                view.endEditing(true)
+                resultLbl.isHidden = false
+                hourLbl.isHidden = false
+                resultLbl.text = "\(Wage.getHours(forWage: wage, andPrice: price))"
+            }
+        }
     }
 
-
+    
+    @IBAction func clearCalculatorPressed(_ sender: Any) {
+        resultLbl.isHidden = true
+        hourLbl.isHidden = true
+        wageTxt.text = ""
+        priceTxt.text = ""
+    }
+    
 }
 
