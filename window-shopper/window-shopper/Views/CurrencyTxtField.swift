@@ -20,6 +20,30 @@ class CurrencyTxtField: UITextField {
     }
     */
     
+    //**** DO NOT EVER CALL DRAW_RECT AND LEAVE IT EMPTY ***
+    //This will cause performance issues with the app
+    override func draw(_ rect: CGRect) {
+        //NEVER call super on draw rect
+        let size: CGFloat = 20 //Must call CGFloat, otherwise it will default to Double, which cannot be used for drawing
+        let currencyLbl = UILabel(frame: CGRect(x: 5, y: (frame.size.height / 2) - size / 2, width: size, height: size)) //sets the position & size to the text field
+        currencyLbl.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.8)
+        currencyLbl.textAlignment = .center
+        currencyLbl.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        currencyLbl.layer.cornerRadius = 5.0
+        
+        //MUST set cliptobounds whenever using draw_rect because it takes off the feature
+        //And it must be added back to any other functions that require clipping as well
+        currencyLbl.clipsToBounds = true
+        
+        //setting locator for correct currency symbol
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        //current location of the device
+        formatter.locale = .current //this is default behavior but shows it can be set
+        currencyLbl.text = formatter.currencySymbol //sets the symbol to the label
+        addSubview(currencyLbl) //adds this view to the text field
+    }
+    
     //Runs code to show these changes in Interface Builder
     //However, the awakeFromNib function needs to run at runtime
     //Therefore, a func needs to be created so that the code can be shared and run by both override functions as needed.
@@ -72,6 +96,8 @@ class CurrencyTxtField: UITextField {
             backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.25) //Choose "Color Literal" double-click for color/opacity options
             layer.cornerRadius = 5.0
             textAlignment = .center
+            
+            clipsToBounds = true //added after calling draw_rect above
             
             if let p = placeholder {
                 //"p" can replace "placeholder!" from above code because if "p" is nil, none of this code will run
