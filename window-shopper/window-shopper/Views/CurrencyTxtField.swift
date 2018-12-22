@@ -40,6 +40,8 @@ class CurrencyTxtField: UITextField {
         formatter.numberStyle = .currency
         //current location of the device
         formatter.locale = .current //this is default behavior but shows it can be set
+        //OR can set to a specific location, such as: "en_GB", "ja_JP", "es_ES_PREEURO"
+        //formatter.locale = Locale(identifier: "fr_FR")
         currencyLbl.text = formatter.currencySymbol //sets the symbol to the label
         addSubview(currencyLbl) //adds this view to the text field
     }
